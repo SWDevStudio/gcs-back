@@ -22,7 +22,7 @@ jobs:
         node-version: '14.x'
 
     - name: 'install'
-      run: npn i
+      run: yarn i
 
     - name: 'test'
-      run: npm run test
+      run: yarn test
