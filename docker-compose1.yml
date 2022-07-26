@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  nest:
+    container_name: gcs-back
+    build:
+      dockerfile: 'Dockerfile'
+      context: '.'
+    ports:
+      - "${NEST_EXTERNAL_PORT}:${NEST_INNER_PORT}"
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${ADMINER_ROOT_USER}
+      POSTGRES_PASSWORD: ${ADMINER_ROOT_PASSWORD}
+      POSTGRES_DB: ${PG_DEFAULT_DB}
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "${ADMINER_PORT}"
