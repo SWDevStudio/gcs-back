@@ -7,9 +7,15 @@ services:
       context: '.'
     ports:
       - "${NEST_EXTERNAL_PORT}:${NEST_INNER_PORT}"
+    volumes:
+      - ".:${WORKDIR}"
+    working_dir: ${WORKDIR}
+    command: sh -c "yarn install && yarn build && yarn start"
   db:
     image: postgres
     restart: always
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${ADMINER_ROOT_USER}
       POSTGRES_PASSWORD: ${ADMINER_ROOT_PASSWORD}
@@ -18,4 +24,4 @@ services:
     image: adminer
     restart: always
     ports:
-      - "${ADMINER_PORT}"
+      - "${ADMINER_EXTERNAL_PORT}:${ADMINER_INNER_PORT}"
