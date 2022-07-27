@@ -10,7 +10,7 @@ services:
     volumes:
       - ".:${WORKDIR}"
     working_dir: ${WORKDIR}
-    command: sh -c "yarn install && yarn build && yarn start"
+    command: sh -c "yarn install && yarn build && yarn start:prod"
   db:
     image: postgres
     restart: always
