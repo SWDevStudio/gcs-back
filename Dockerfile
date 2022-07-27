@@ -16,4 +16,4 @@ ENV PORT 4200
 EXPOSE $PORT
 
 # Выполнить команду node index.js при включении контейнера
-CMD ["yarn", "start"]
+#CMD ["yarn", "start"]
