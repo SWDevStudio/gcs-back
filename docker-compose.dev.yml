@@ -1,12 +1,11 @@
 version: "3.7"
 services:
-  nest:
-    container_name: gcs-back
+  gcs-back:
     build:
       dockerfile: 'Dockerfile'
       context: '.'
     ports:
-      - "${NEST_EXTERNAL_PORT}:${NEST_INNER_PORT}"
+      - "${NEST_PORT}:3000"
     volumes:
         - ".:${WORKDIR}"
     working_dir: ${WORKDIR}
@@ -15,13 +14,13 @@ services:
     image: postgres
     restart: always
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     environment:
-      POSTGRES_USER: ${ADMINER_ROOT_USER}
-      POSTGRES_PASSWORD: ${ADMINER_ROOT_PASSWORD}
-      POSTGRES_DB: ${PG_DEFAULT_DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
   adminer:
     image: adminer
     restart: always
     ports:
-      - "${ADMINER_EXTERNAL_PORT}:${ADMINER_INNER_PORT}"
+      - "${ADMINER_PORT}:8080"
