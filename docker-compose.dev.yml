@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  gcs-back:
+    build:
+      dockerfile: 'Dockerfile'
+      context: '.'
+    ports:
+      - "${NEST_PORT}:3000"
+    volumes:
+        - ".:${WORKDIR}"
+    working_dir: ${WORKDIR}
+    command: sh -c "yarn install && yarn start:dev"
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "${ADMINER_PORT}:8080"
