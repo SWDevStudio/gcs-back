@@ -1,5 +1,8 @@
-import UserDto from './user.dto';
+import { UserDto } from './user.dto';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export default interface UserCreateDto extends UserDto {
+export class UserCreateDto extends UserDto {
+  @IsNotEmpty()
+  @IsString()
   password: string;
 }
