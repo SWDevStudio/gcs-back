@@ -3,6 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user-create.dto';
+import * as bcrypt from 'bcrypt';
+import { UserDto } from './dto/user.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -11,7 +14,9 @@ export class UserService {
     private UserRepository: Repository<UserEntity>,
   ) {}
 
-  async create(user: UserCreateDto) {
-    return this.UserRepository.save(user);
+  async create(user: UserCreateDto): Promise<UserDto> {
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(user.password, salt);
+    return plainToClass(UserDto, await this.UserRepository.save(user));
   }
 }
