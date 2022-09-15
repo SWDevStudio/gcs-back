@@ -21,9 +21,7 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('/register')
   async register(@Body() userDto: UserCreateDto): Promise<UserDto> {
-    const user = new UserEntity(await this.userService.create(userDto));
-    await this.mailService.sendUserConfirm(user);
-    return user;
+    return new UserEntity(await this.userService.create(userDto));
   }
 
   @Post('/confirm')

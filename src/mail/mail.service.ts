@@ -5,7 +5,6 @@ import { UserDto } from '../user/dto/user.dto';
 @Injectable()
 export class MailService {
   constructor(private mailerService: MailerService) {}
-
   async sendUserConfirm(user: UserDto) {
     return this.mailerService.sendMail({
       to: user.email,

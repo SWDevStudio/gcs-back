@@ -5,18 +5,21 @@ import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user-create.dto';
 import * as bcrypt from 'bcrypt';
 import { UserDto } from './dto/user.dto';
-import { plainToClass } from 'class-transformer';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private UserRepository: Repository<UserEntity>,
+    private MailService: MailService,
   ) {}
 
   async create(user: UserCreateDto): Promise<UserDto> {
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(user.password, salt);
-    return plainToClass(UserDto, await this.UserRepository.save(user));
+    const userData = await this.UserRepository.save(user);
+    await this.MailService.sendUserConfirm(userData);
+    return userData;
   }
 }
