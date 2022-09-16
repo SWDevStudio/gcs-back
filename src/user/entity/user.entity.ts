@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
 
 @Entity({
   name: 'user',
@@ -10,15 +17,25 @@ export class UserEntity {
 
   @Column({
     unique: true,
+    nullable: true,
   })
   email: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Exclude()
   password: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async setPassword() {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
