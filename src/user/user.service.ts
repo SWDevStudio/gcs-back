@@ -12,14 +12,11 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private UserRepository: Repository<UserEntity>,
-    private MailService: MailService,
   ) {}
 
   async create(user: UserCreateDto): Promise<UserDto> {
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(user.password, salt);
-    const userData = await this.UserRepository.save(user);
-    await this.MailService.sendUserConfirm(userData);
-    return userData;
+    return await this.UserRepository.save(user);
   }
 }

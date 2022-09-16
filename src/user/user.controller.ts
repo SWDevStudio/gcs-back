@@ -13,19 +13,11 @@ import { UserEntity } from './entity/user.entity';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private mailService: MailService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('/register')
   async register(@Body() userDto: UserCreateDto): Promise<UserDto> {
     return new UserEntity(await this.userService.create(userDto));
-  }
-
-  @Post('/confirm')
-  async confirm(@Body() userDto: UserDto) {
-    return await this.mailService.sendUserConfirm(userDto);
   }
 }
